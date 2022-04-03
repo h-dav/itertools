@@ -34,13 +34,23 @@ func ExampleRepeat() {
 	// Output: hellohellohellohellohello
 }
 
-//func ExampleZip() {
-//	first := []int{1, 2, 3}
-//	second := []int{4, 5, 6}
-//	third := []int{7, 8, 9}
-//	ch, err := Zip(first, second, third)
-//	for value := range ch {
-//		fmt.Printf("%v", value)
-//	}
-//	// Output: [1 4 7][2 5 8][3 6 9]
-//}
+func ExampleZip() {
+	first := []int{1, 2, 3}
+	second := []int{4, 5, 6}
+	third := []int{7, 8, 9}
+	ch := Zip(first, second, third)
+	for value := range ch {
+		fmt.Printf("%v", value)
+	}
+	// Output: [1 4 7][2 5 8][3 6 9]
+}
+func ExampleZipFailure() {
+	first := []int{1, 2, 3}
+	second := []int{4, 5, 6}
+	third := []int{7, 8, 9, 11}
+	ch := Zip(first, second, third)
+	for value := range ch {
+		fmt.Printf("%v", value)
+	}
+	// Output: all parameters must be of the same length
+}

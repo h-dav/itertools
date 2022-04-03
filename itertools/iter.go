@@ -1,5 +1,9 @@
 package itertools
 
+import (
+	"reflect"
+)
+
 //type IterableTypes interface {
 //	int | any
 //	//[]int | map[int]int
@@ -12,6 +16,7 @@ package itertools
 //type Iterator chan interface{ Result }
 type Iterator chan interface{}
 
+// Iter returns an Iterator for the iterables parameter
 func Iter[T any](iterables []T) Iterator {
 	ch := make(Iterator)
 	go func() {
@@ -23,11 +28,13 @@ func Iter[T any](iterables []T) Iterator {
 	return ch
 }
 
+// Next goes to the next item within an Iterator
 func Next(ch Iterator) any {
 	next := <-ch
 	return next
 }
 
+// Repeat returns an Iterator which contains value parameter, size parameter amount of times
 func Repeat(value any, size int) Iterator {
 	s := make([]any, size)
 	for i := range s {
@@ -36,35 +43,36 @@ func Repeat(value any, size int) Iterator {
 	return Iter(s)
 }
 
-//func Zip[T any](iterables ...[]T) Iterator {
-//	ch := make(Iterator)
-//	go func() {
-//		defer close(ch)
-//		if ok := ensureSameLength(iterables); ok != true {
-//			ch <- Result{Returned: false, Error: error.Error("all iterables are not that same length")}
-//			break
-//		}
-//		var toSend []any
-//		for index, _ := range iterables[0] {
-//			toSend = nil
-//			for _, iterable := range iterables {
-//				toSend = append(toSend, iterable[index])
-//			}
-//			ch <- toSend
-//		}
-//	}()
-//	return ch
-//}
-//
-//func ensureSameLength[T any](nestedList [][]T) bool {
-//	ch := Iter(nestedList)
-//	first := Next(ch)
-//	firstLength := reflect.ValueOf(first).Len()
-//	fmt.Println(firstLength)
-//	//firstLenght := len(first)
-//	for nested := range ch {
-//		if reflect.ValueOf(nested).Len() != firstLength {
-//			return false
-//		}
-//	}
-//}
+// Zip iterates over multiple data objects in sync
+func Zip[T any](iterables ...[]T) Iterator {
+	ch := make(Iterator)
+	go func() {
+		defer close(ch)
+		if ok := ensureSameLength(iterables); ok != true {
+			ch <- "all parameters must be of the same length"
+			return
+		}
+		var toSend []any
+		for index, _ := range iterables[0] {
+			toSend = nil
+			for _, iterable := range iterables {
+				toSend = append(toSend, iterable[index])
+			}
+			ch <- toSend
+		}
+	}()
+	return ch
+}
+
+// ensureSameLength ensures that all nested arrays are the same length
+func ensureSameLength[T any](nestedList [][]T) bool {
+	ch := Iter(nestedList)
+	first := Next(ch)
+	firstLength := reflect.ValueOf(first).Len()
+	for nested := range ch {
+		if reflect.ValueOf(nested).Len() != firstLength {
+			return false
+		}
+	}
+	return true
+}
