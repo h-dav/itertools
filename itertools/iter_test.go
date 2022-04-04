@@ -54,3 +54,14 @@ func ExampleZipFailure() {
 	}
 	// Output: all parameters must be of the same length
 }
+
+func ExampleChain() {
+	first := []int{1, 2, 3}
+	second := []int{4, 5, 6}
+	third := []int{7, 8, 9}
+	ch := Chain(first, second, third)
+	for value := range ch {
+		fmt.Printf("%v", value)
+	}
+	// Output: 123456789
+}

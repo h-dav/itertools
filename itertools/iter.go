@@ -48,7 +48,7 @@ func Zip[T any](iterables ...[]T) Iterator {
 	ch := make(Iterator)
 	go func() {
 		defer close(ch)
-		if ok := ensureSameLength(iterables); ok != true {
+		if ok := ensureSameLength(iterables); !ok {
 			ch <- "all parameters must be of the same length"
 			return
 		}
@@ -59,6 +59,20 @@ func Zip[T any](iterables ...[]T) Iterator {
 				toSend = append(toSend, iterable[index])
 			}
 			ch <- toSend
+		}
+	}()
+	return ch
+}
+
+// Chain allows for multiple arrays of the same type to be iterated over
+func Chain[T any](iterables ...[]T) Iterator {
+	ch := make(Iterator)
+	go func() {
+		defer close(ch)
+		for _, iterable := range iterables {
+			for index, _ := range iterable {
+				ch <- iterable[index]
+			}
 		}
 	}()
 	return ch
