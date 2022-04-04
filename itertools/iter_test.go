@@ -65,3 +65,36 @@ func ExampleChain() {
 	}
 	// Output: 123456789
 }
+
+//func ExampleCombinations() {
+//	ch := Combinations("abcd", 3)
+//	for value := range ch {
+//		fmt.Printf("%v", value)
+//	}
+//	// Output: abacad
+//}
+
+func ExampleCount() {
+	ch := Count(1, 2)
+	fmt.Printf("%v", Next(ch))
+	fmt.Printf("%v", Next(ch))
+	fmt.Printf("%v", Next(ch))
+	// Output: 135
+}
+
+func ExampleCountDec() {
+	ch := Count(1.5, 0.5)
+	fmt.Printf("%v,", Next(ch))
+	fmt.Printf("%v,", Next(ch))
+	fmt.Printf("%v,", Next(ch))
+	fmt.Printf("%v", Next(ch))
+	// Output:1.5,2,2.5,3
+}
+
+func ExampleCycle() {
+	ch := Cycle("teststring")
+	for i := 0; i < 14; i++ {
+		fmt.Printf("%v", Next(ch))
+	}
+	// Output: teststringtest
+}

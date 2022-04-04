@@ -2,6 +2,7 @@ package itertools
 
 import (
 	"reflect"
+	"strings"
 )
 
 //type IterableTypes interface {
@@ -76,6 +77,52 @@ func Chain[T any](iterables ...[]T) Iterator {
 		}
 	}()
 	return ch
+}
+
+//func Combinations(iterable string, times uint) Iterator {
+//	// TODO
+//	ch := make(Iterator)
+//	go func() {
+//		defer close(ch)
+//		prepared := strings.SplitAfter(iterable, "")
+//		for index, value := range prepared {
+//			iterator := Iter(prepared[index:])
+//			for nextVal := range iterator {
+//				ch <- value + fmt.Sprintf("%v", nextVal)
+//			}
+//		}
+//	}()
+//	return ch
+//}
+
+// Count counts up from a certain number in an increment
+//func Count[T, S float32 | float64 | int](start T, step S) (ch Iterator) {
+func Count[T float32 | float64 | int](start, step T) (ch Iterator) {
+	// consider changing step to uint
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		for {
+			ch <- start
+			start = start + step
+		}
+	}()
+	return
+}
+
+// Cycle goes over a string seemingly forever
+func Cycle(iterable string) (ch Iterator) {
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		for {
+			letters := strings.SplitAfter(iterable, "")
+			for _, letter := range letters {
+				ch <- letter
+			}
+		}
+	}()
+	return
 }
 
 // ensureSameLength ensures that all nested arrays are the same length
