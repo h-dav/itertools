@@ -1,4 +1,4 @@
-package itertools
+package operation
 
 import (
 	"reflect"
