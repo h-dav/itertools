@@ -1,7 +1,9 @@
-package operation
+package itertools
 
 import (
 	"fmt"
+	"math/rand"
+	"testing"
 )
 
 func ExampleIterInt() {
@@ -11,6 +13,19 @@ func ExampleIterInt() {
 		fmt.Printf("%v", value)
 	}
 	// Output: 1234
+}
+
+func TestIterLower(t *testing.T) {
+	expected, counter := 1, 0
+	arr := []int{1}
+	ch := Iter(arr)
+	for _ = range ch {
+		counter++
+	}
+	if counter != expected {
+		t.Log("counter not correct number")
+		t.Fail()
+	}
 }
 
 func ExampleNext() {
@@ -27,11 +42,22 @@ func ExampleNext() {
 }
 
 func ExampleRepeat() {
-	ch := Repeat("hello", 5)
+	ch := Repeat("example_string", 5)
 	for value := range ch {
 		fmt.Printf("%v", value)
 	}
-	// Output: hellohellohellohellohello
+	// Output: example_stringexample_stringexample_stringexample_stringexample_string
+}
+
+func generateRandomString(stringLength int) (result string) {
+	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+	b := make([]rune, stringLength)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	result = string(b)
+	return
 }
 
 func ExampleZip() {

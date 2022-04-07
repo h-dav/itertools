@@ -1,20 +1,10 @@
-package operation
+package itertools
 
 import (
 	"reflect"
 	"strings"
 )
 
-//type IterableTypes interface {
-//	int | any
-//	//[]int | map[int]int
-//	//map[any]any | []any | []int | map[int]int
-//}
-//type Result struct {
-//	Returned any
-//	Error    error
-//}
-//type Iterator chan interface{ Result }
 type Iterator chan interface{}
 
 // Iter returns an Iterator for the iterables parameter
@@ -31,8 +21,7 @@ func Iter[T any](iterables []T) Iterator {
 
 // Next goes to the next item within an Iterator
 func Next(ch Iterator) any {
-	next := <-ch
-	return next
+	return <-ch
 }
 
 // Repeat returns an Iterator which contains value parameter, size parameter amount of times
@@ -96,7 +85,6 @@ func Chain[T any](iterables ...[]T) Iterator {
 //}
 
 // Count counts up from a certain number in an increment
-//func Count[T, S float32 | float64 | int](start T, step S) (ch Iterator) {
 func Count[T float32 | float64 | int](start, step T) (ch Iterator) {
 	// consider changing step to uint
 	ch = make(Iterator)
