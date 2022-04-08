@@ -8,15 +8,15 @@ import (
 type Iterator chan interface{}
 
 // Iter returns an Iterator for the iterables parameter
-func Iter[T any](iterables []T) Iterator {
-	ch := make(Iterator)
+func Iter[T any](iterables []T) (ch Iterator) {
+	ch = make(Iterator)
 	go func() {
 		defer close(ch)
 		for _, value := range iterables {
 			ch <- value
 		}
 	}()
-	return ch
+	return
 }
 
 // Next goes to the next item within an Iterator
@@ -34,8 +34,8 @@ func Repeat(value any, size int) Iterator {
 }
 
 // Zip iterates over multiple data objects in sync
-func Zip[T any](iterables ...[]T) Iterator {
-	ch := make(Iterator)
+func Zip[T any](iterables ...[]T) (ch Iterator) {
+	ch = make(Iterator)
 	go func() {
 		defer close(ch)
 		if ok := ensureSameLength(iterables); !ok {
@@ -51,12 +51,12 @@ func Zip[T any](iterables ...[]T) Iterator {
 			ch <- toSend
 		}
 	}()
-	return ch
+	return
 }
 
 // Chain allows for multiple arrays of the same type to be iterated over
-func Chain[T any](iterables ...[]T) Iterator {
-	ch := make(Iterator)
+func Chain[T any](iterables ...[]T) (ch Iterator) {
+	ch = make(Iterator)
 	go func() {
 		defer close(ch)
 		for _, iterable := range iterables {
@@ -65,7 +65,7 @@ func Chain[T any](iterables ...[]T) Iterator {
 			}
 		}
 	}()
-	return ch
+	return
 }
 
 //func Combinations(iterable string, times uint) Iterator {
@@ -107,6 +107,36 @@ func Cycle(iterable string) (ch Iterator) {
 			letters := strings.SplitAfter(iterable, "")
 			for _, letter := range letters {
 				ch <- letter
+			}
+		}
+	}()
+	return
+}
+
+func Accumulate(iterable []int, operator string, start int) (ch Iterator) {
+	if operator == "" {
+		operator = "add"
+	}
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		if start != 0 {
+			ch <- start
+		}
+		switch operator {
+		case "add":
+			toSend := iterable[0]
+			ch <- toSend + start
+			for _, element := range iterable[1:] {
+				toSend = toSend + element
+				ch <- toSend + start
+			}
+		case "multiply":
+			toSend := iterable[0]
+			ch <- toSend + start
+			for _, element := range iterable[1:] {
+				toSend = toSend * element
+				ch <- toSend + start
 			}
 		}
 	}()
