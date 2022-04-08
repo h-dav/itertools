@@ -49,17 +49,6 @@ func ExampleRepeat() {
 	// Output: example_stringexample_stringexample_stringexample_stringexample_string
 }
 
-func generateRandomString(stringLength int) (result string) {
-	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-	b := make([]rune, stringLength)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
-	}
-	result = string(b)
-	return
-}
-
 func ExampleZip() {
 	first := []int{1, 2, 3}
 	second := []int{4, 5, 6}
@@ -70,6 +59,7 @@ func ExampleZip() {
 	}
 	// Output: [1 4 7][2 5 8][3 6 9]
 }
+
 func ExampleZipFailure() {
 	first := []int{1, 2, 3}
 	second := []int{4, 5, 6}
@@ -122,4 +112,51 @@ func ExampleCycle() {
 		fmt.Printf("%v", Next(ch))
 	}
 	// Output: teststringtest
+}
+
+func ExampleAccumulate() {
+	arr := []int{1, 2, 3, 4, 5}
+	ch := Accumulate(arr, "", 0)
+	for value := range ch {
+		fmt.Printf("%v", value)
+	}
+	// Output: 1361015
+}
+
+func ExampleAccumulateWithStart() {
+	arr := []int{1, 2, 3, 4, 5}
+	ch := Accumulate(arr, "", 100)
+	for value := range ch {
+		fmt.Printf("%v,", value)
+	}
+	// Output: 100,101,103,106,110,115,
+}
+
+func ExampleAccumulateMultiply() {
+	arr := []int{1, 2, 3, 4, 5}
+	ch := Accumulate(arr, "multiply", 0)
+	for value := range ch {
+		fmt.Printf("%v,", value)
+	}
+	// Output: 1,2,6,24,120,
+}
+
+func ExampleAccumulateMultiplyWithStart() {
+	arr := []int{1, 2, 3, 4, 5}
+	ch := Accumulate(arr, "multiply", 100)
+	for value := range ch {
+		fmt.Printf("%v,", value)
+	}
+	// Output: 100,101,102,106,124,220,
+}
+
+func generateRandomString(stringLength int) (result string) {
+	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+	b := make([]rune, stringLength)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	result = string(b)
+	return
 }

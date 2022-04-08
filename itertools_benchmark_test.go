@@ -74,3 +74,67 @@ func BenchmarkZip(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkAccumulate(b *testing.B) {
+	repeatTimes := 10000000
+	for i := 0; i < b.N; i++ {
+		counter := 0
+		arr := rand.Perm(repeatTimes)
+		ch := Accumulate(arr, "", 0)
+		for _ = range ch {
+			counter++
+		}
+		if counter != repeatTimes {
+			b.Log("Accumulate results not long enough")
+			b.Fail()
+		}
+
+	}
+}
+func BenchmarkAccumulateWithStart(b *testing.B) {
+	repeatTimes := 10000000
+	for i := 0; i < b.N; i++ {
+		counter := 0
+		arr := rand.Perm(repeatTimes)
+		ch := Accumulate(arr, "", 100)
+		for _ = range ch {
+			counter++
+		}
+		if counter-1 != repeatTimes {
+			b.Log("Accumulate results not long enough")
+			b.Fail()
+		}
+	}
+}
+
+func BenchmarkAccumulateMultiply(b *testing.B) {
+	repeatTimes := 10000000
+	for i := 0; i < b.N; i++ {
+		counter := 0
+		arr := rand.Perm(repeatTimes)
+		ch := Accumulate(arr, "multiply", 0)
+		for _ = range ch {
+			counter++
+		}
+		if counter != repeatTimes {
+			b.Log("Accumulate results not long enough")
+			b.Fail()
+		}
+	}
+}
+
+func BenchmarkAccumulateMultiplyWithStart(b *testing.B) {
+	repeatTimes := 10000000
+	for i := 0; i < b.N; i++ {
+		counter := 0
+		arr := rand.Perm(repeatTimes)
+		ch := Accumulate(arr, "multiply", 100)
+		for _ = range ch {
+			counter++
+		}
+		if counter-1 != repeatTimes {
+			b.Log("Accumulate results not long enough")
+			b.Fail()
+		}
+	}
+}
