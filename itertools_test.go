@@ -150,15 +150,6 @@ func ExampleAccumulateMultiplyWithStart() {
 	// Output: 100:101:102:106:124:220:
 }
 
-func ExampleAccumulatePower() {
-	arr := []int{10, 2, 3, 4, 14}
-	ch := Accumulate(arr, "power", 0)
-	for value := range ch {
-		fmt.Printf("%v:", value)
-	}
-	// Output: 100:101:102:106:124:220:
-}
-
 func generateRandomString(stringLength int) (result string) {
 	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
