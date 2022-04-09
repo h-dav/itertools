@@ -1,6 +1,7 @@
 package itertools
 
 import (
+	"math"
 	"reflect"
 	"strings"
 )
@@ -114,30 +115,27 @@ func Cycle(iterable string) (ch Iterator) {
 }
 
 func Accumulate(iterable []int, operator string, start int) (ch Iterator) {
-	if operator == "" {
-		operator = "add"
-	}
 	ch = make(Iterator)
 	go func() {
 		defer close(ch)
 		if start != 0 {
 			ch <- start
 		}
-		switch operator {
-		case "add":
-			toSend := iterable[0]
-			ch <- toSend + start
-			for _, element := range iterable[1:] {
+		toSend := iterable[0]
+		ch <- toSend + start
+		for _, element := range iterable[1:] {
+			switch operator {
+			case "add", "":
 				toSend = toSend + element
-				ch <- toSend + start
-			}
-		case "multiply":
-			toSend := iterable[0]
-			ch <- toSend + start
-			for _, element := range iterable[1:] {
+			case "multiply":
 				toSend = toSend * element
-				ch <- toSend + start
+			case "power":
+				toSend = int(math.Pow(float64(toSend), float64(element)))
+			default:
+				ch <- "not valid operator"
+				return
 			}
+			ch <- toSend + start
 		}
 	}()
 	return

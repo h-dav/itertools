@@ -101,9 +101,9 @@ func ExampleCount() {
 func ExampleCountDec() {
 	ch := Count(1.5, 0.5)
 	for i := 0; i < 4; i++ {
-		fmt.Printf("%v,", Next(ch))
+		fmt.Printf("%v:", Next(ch))
 	}
-	// Output:1.5,2,2.5,3,
+	// Output:1.5:2:2.5:3:
 }
 
 func ExampleCycle() {
@@ -127,27 +127,36 @@ func ExampleAccumulateWithStart() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "", 100)
 	for value := range ch {
-		fmt.Printf("%v,", value)
+		fmt.Printf("%v:", value)
 	}
-	// Output: 100,101,103,106,110,115,
+	// Output: 100:101:103:106:110:115:
 }
 
 func ExampleAccumulateMultiply() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "multiply", 0)
 	for value := range ch {
-		fmt.Printf("%v,", value)
+		fmt.Printf("%v:", value)
 	}
-	// Output: 1,2,6,24,120,
+	// Output: 1:2:6:24:120:
 }
 
 func ExampleAccumulateMultiplyWithStart() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "multiply", 100)
 	for value := range ch {
-		fmt.Printf("%v,", value)
+		fmt.Printf("%v:", value)
 	}
-	// Output: 100,101,102,106,124,220,
+	// Output: 100:101:102:106:124:220:
+}
+
+func ExampleAccumulatePower() {
+	arr := []int{10, 2, 3, 4, 14}
+	ch := Accumulate(arr, "power", 0)
+	for value := range ch {
+		fmt.Printf("%v:", value)
+	}
+	// Output: 100:101:102:106:124:220:
 }
 
 func generateRandomString(stringLength int) (result string) {
