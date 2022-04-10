@@ -150,6 +150,24 @@ func ExampleAccumulateMultiplyWithStart() {
 	// Output: 100:101:102:106:124:220:
 }
 
+func ExampleTee() {
+	value := "ABCDEFGHIJKLMNOPQ"
+	ch := tee(value, 2)
+	for value := range ch {
+		fmt.Printf("%v:", value)
+	}
+	// Output: AB:CD:EF:GH:IJ:KL:MN:OP:Q:
+}
+
+func ExampleTeeArray() {
+	value := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	ch := tee(value, 2)
+	for value := range ch {
+		fmt.Printf("%v:", value)
+	}
+	// Output: [1 2]:[3 4]:[5 6]:[7 8]:[9]:
+}
+
 func generateRandomString(stringLength int) (result string) {
 	var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 

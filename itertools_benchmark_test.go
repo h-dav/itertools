@@ -138,3 +138,34 @@ func BenchmarkAccumulateMultiplyWithStart(b *testing.B) {
 		}
 	}
 }
+
+func BenchmarkTeeString(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		stringLength := 1000000
+		counter := 0
+		param := generateRandomString(stringLength)
+		ch := tee(param, 4)
+		for _ = range ch {
+			counter++
+		}
+		if counter != stringLength/4 {
+			b.Log("tee results not long enough")
+			b.Fail()
+		}
+	}
+}
+func BenchmarkTeeArray(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		repeatTimes := 1000000
+		arr := rand.Perm(repeatTimes)
+		counter := 0
+		ch := tee(arr, 4)
+		for _ = range ch {
+			counter++
+		}
+		if counter != repeatTimes/4 {
+			b.Log("tee results not long enough")
+			b.Fail()
+		}
+	}
+}

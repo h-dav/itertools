@@ -141,6 +141,37 @@ func Accumulate(iterable []int, operator string, start int) (ch Iterator) {
 	return
 }
 
+func tee[T []int | string](iterable T, n int) (ch Iterator) {
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		switch reflect.TypeOf(iterable).Kind() {
+		case reflect.String:
+			value := reflect.ValueOf(iterable).String()
+			for len(value) != 0 {
+				if len(value) < n {
+					ch <- value
+					return
+				}
+				ch <- value[0:n]
+				value = value[n:]
+			}
+		case reflect.Array, reflect.Slice:
+			value := reflect.ValueOf(iterable)
+			for value.Len() != 0 {
+				if value.Len() < n {
+					ch <- value
+					return
+				}
+				toSend := value.Slice(0, n)
+				value = value.Slice(n, value.Len())
+				ch <- toSend
+			}
+		}
+	}()
+	return
+}
+
 // ensureSameLength ensures that all nested arrays are the same length
 func ensureSameLength[T any](nestedList [][]T) bool {
 	ch := Iter(nestedList)
