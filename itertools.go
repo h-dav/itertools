@@ -141,7 +141,7 @@ func Accumulate(iterable []int, operator string, start int) (ch Iterator) {
 	return
 }
 
-func tee[T []int | string](iterable T, n int) (ch Iterator) {
+func Tee[T []int | string](iterable T, n int) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
 		defer close(ch)
@@ -168,6 +168,19 @@ func tee[T []int | string](iterable T, n int) (ch Iterator) {
 				ch <- toSend
 			}
 		}
+	}()
+	return
+}
+
+func Pairwise(iterable string) (ch Iterator) {
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		innerCh := Tee(iterable, 2)
+		for value := range innerCh {
+			ch <- value
+		}
+
 	}()
 	return
 }

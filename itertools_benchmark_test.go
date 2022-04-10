@@ -144,12 +144,12 @@ func BenchmarkTeeString(b *testing.B) {
 		stringLength := 1000000
 		counter := 0
 		param := generateRandomString(stringLength)
-		ch := tee(param, 4)
+		ch := Tee(param, 4)
 		for _ = range ch {
 			counter++
 		}
 		if counter != stringLength/4 {
-			b.Log("tee results not long enough")
+			b.Log("Tee results not long enough")
 			b.Fail()
 		}
 	}
@@ -159,12 +159,12 @@ func BenchmarkTeeArray(b *testing.B) {
 		repeatTimes := 1000000
 		arr := rand.Perm(repeatTimes)
 		counter := 0
-		ch := tee(arr, 4)
+		ch := Tee(arr, 4)
 		for _ = range ch {
 			counter++
 		}
 		if counter != repeatTimes/4 {
-			b.Log("tee results not long enough")
+			b.Log("Tee results not long enough")
 			b.Fail()
 		}
 	}

@@ -151,8 +151,8 @@ func ExampleAccumulateMultiplyWithStart() {
 }
 
 func ExampleTee() {
-	value := "ABCDEFGHIJKLMNOPQ"
-	ch := tee(value, 2)
+	param := "ABCDEFGHIJKLMNOPQ"
+	ch := Tee(param, 2)
 	for value := range ch {
 		fmt.Printf("%v:", value)
 	}
@@ -160,12 +160,21 @@ func ExampleTee() {
 }
 
 func ExampleTeeArray() {
-	value := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
-	ch := tee(value, 2)
+	param := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
+	ch := Tee(param, 2)
 	for value := range ch {
 		fmt.Printf("%v:", value)
 	}
 	// Output: [1 2]:[3 4]:[5 6]:[7 8]:[9]:
+}
+
+func ExamplePairwise() {
+	param := "ABCDEFGHIJKLP"
+	ch := Pairwise(param)
+	for value := range ch {
+		fmt.Printf("%v:", value)
+	}
+	// Output: AB:CD:EF:GH:IJ:KL:P:
 }
 
 func generateRandomString(stringLength int) (result string) {
