@@ -19,7 +19,7 @@ func TestIterLower(t *testing.T) {
 	expected, counter := 1, 0
 	arr := []int{1}
 	ch := Iter(arr)
-	for _ = range ch {
+	for range ch {
 		counter++
 	}
 	if counter != expected {
