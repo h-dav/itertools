@@ -1,2 +1,2 @@
-# operation
-Collection of packages for Golang operations
+# itertools
+Basically python itertools in golang
