@@ -98,6 +98,7 @@ func Cycle(iterable string) (ch Iterator) {
 	return
 }
 
+// Accumulate returns an Iterator that sends/receives accumulated sums, or accumulated results of other functions
 func Accumulate(iterable []int, operator string, start int) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
@@ -125,6 +126,7 @@ func Accumulate(iterable []int, operator string, start int) (ch Iterator) {
 	return
 }
 
+// Tee returns the next n number of items next to each other
 func Tee[T []int | string](iterable T, n int) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
@@ -156,6 +158,7 @@ func Tee[T []int | string](iterable T, n int) (ch Iterator) {
 	return
 }
 
+// Pairwise sends/receives two characters next in a string via an Iterator
 func Pairwise(iterable string) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
@@ -164,7 +167,6 @@ func Pairwise(iterable string) (ch Iterator) {
 		for value := range innerCh {
 			ch <- value
 		}
-
 	}()
 	return
 }
