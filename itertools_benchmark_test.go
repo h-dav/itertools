@@ -7,7 +7,10 @@ import (
 )
 
 const repeatTimes = 1000
+<<<<<<< HEAD
 const stringLength = 100000
+=======
+>>>>>>> 55d084a109fabe0712448cdb8d72877cb68aab58
 
 func BenchmarkIter(b *testing.B) {
 	arr := rand.Perm(repeatTimes)
@@ -25,6 +28,10 @@ func BenchmarkIter(b *testing.B) {
 }
 
 func BenchmarkRepeatEdge(b *testing.B) {
+<<<<<<< HEAD
+=======
+	stringLength := 100000
+>>>>>>> 55d084a109fabe0712448cdb8d72877cb68aab58
 	for n := 0; n < b.N; n++ {
 		testString := generateRandomString(stringLength)
 		ch := Repeat(testString, repeatTimes)
@@ -136,6 +143,10 @@ func BenchmarkAccumulateMultiplyWithStart(b *testing.B) {
 
 func BenchmarkTeeString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
+<<<<<<< HEAD
+=======
+		stringLength := 1000
+>>>>>>> 55d084a109fabe0712448cdb8d72877cb68aab58
 		counter := 0
 		param := generateRandomString(stringLength)
 		ch := Tee(param, 4)
