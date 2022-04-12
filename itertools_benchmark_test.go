@@ -7,7 +7,7 @@ import (
 )
 
 const repeatTimes = 1000
-const stringLength = 100000
+const stringLength = 100
 
 func BenchmarkIter(b *testing.B) {
 	arr := rand.Perm(repeatTimes)
