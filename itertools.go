@@ -44,7 +44,7 @@ func Zip[T any](iterables ...[]T) (ch Iterator) {
 			return
 		}
 		var toSend []any
-		for index, _ := range iterables[0] {
+		for index := range iterables[0] {
 			toSend = nil
 			for _, iterable := range iterables {
 				toSend = append(toSend, iterable[index])
@@ -61,7 +61,7 @@ func Chain[T any](iterables ...[]T) (ch Iterator) {
 	go func() {
 		defer close(ch)
 		for _, iterable := range iterables {
-			for index, _ := range iterable {
+			for index := range iterable {
 				ch <- iterable[index]
 			}
 		}
