@@ -82,14 +82,6 @@ func ExampleChain() {
 	// Output: 123456789
 }
 
-//func ExampleCombinations() {
-//	ch := Combinations("abcd", 3)
-//	for value := range ch {
-//		fmt.Printf("%v", value)
-//	}
-//	// Output: abacad
-//}
-
 func ExampleCount() {
 	ch := Count(1, 2)
 	fmt.Printf("%v", Next(ch))

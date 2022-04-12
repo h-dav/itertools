@@ -69,22 +69,6 @@ func Chain[T any](iterables ...[]T) (ch Iterator) {
 	return
 }
 
-//func Combinations(iterable string, times uint) Iterator {
-//	// TODO
-//	ch := make(Iterator)
-//	go func() {
-//		defer close(ch)
-//		prepared := strings.SplitAfter(iterable, "")
-//		for index, value := range prepared {
-//			iterator := Iter(prepared[index:])
-//			for nextVal := range iterator {
-//				ch <- value + fmt.Sprintf("%v", nextVal)
-//			}
-//		}
-//	}()
-//	return ch
-//}
-
 // Count counts up from a certain number in an increment
 func Count[T float32 | float64 | int](start, step T) (ch Iterator) {
 	// consider changing step to uint
