@@ -9,8 +9,8 @@ import (
 func ExampleIterInt() {
 	arr := []int{1, 2, 3, 4}
 	ch := Iter(arr)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: 1234
 }
@@ -31,20 +31,20 @@ func TestIterLower(t *testing.T) {
 func ExampleNext() {
 	arr := []int{1, 2, 3, 4}
 	ch := Iter(arr)
-	value := Next(ch)
-	fmt.Printf("%v", value)
-	value = Next(ch)
-	fmt.Printf("%v", value)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	element := Next(ch)
+	fmt.Printf("%v", element)
+	element = Next(ch)
+	fmt.Printf("%v", element)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: 1234
 }
 
 func ExampleRepeat() {
 	ch := Repeat("example_string", 5)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: example_stringexample_stringexample_stringexample_stringexample_string
 }
@@ -54,8 +54,8 @@ func ExampleZip() {
 	second := []int{4, 5, 6}
 	third := []int{7, 8, 9}
 	ch := Zip(first, second, third)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: [1 4 7][2 5 8][3 6 9]
 }
@@ -65,8 +65,8 @@ func ExampleZipFailure() {
 	second := []int{4, 5, 6}
 	third := []int{7, 8, 9, 11}
 	ch := Zip(first, second, third)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: all parameters must be of the same length
 }
@@ -76,8 +76,8 @@ func ExampleChain() {
 	second := []int{4, 5, 6}
 	third := []int{7, 8, 9}
 	ch := Chain(first, second, third)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: 123456789
 }
@@ -109,8 +109,8 @@ func ExampleCycle() {
 func ExampleAccumulate() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "", 0)
-	for value := range ch {
-		fmt.Printf("%v", value)
+	for element := range ch {
+		fmt.Printf("%v", element)
 	}
 	// Output: 1361015
 }
@@ -118,8 +118,8 @@ func ExampleAccumulate() {
 func ExampleAccumulateWithStart() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "", 100)
-	for value := range ch {
-		fmt.Printf("%v:", value)
+	for element := range ch {
+		fmt.Printf("%v:", element)
 	}
 	// Output: 100:101:103:106:110:115:
 }
@@ -127,8 +127,8 @@ func ExampleAccumulateWithStart() {
 func ExampleAccumulateMultiply() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "multiply", 0)
-	for value := range ch {
-		fmt.Printf("%v:", value)
+	for element := range ch {
+		fmt.Printf("%v:", element)
 	}
 	// Output: 1:2:6:24:120:
 }
@@ -136,8 +136,8 @@ func ExampleAccumulateMultiply() {
 func ExampleAccumulateMultiplyWithStart() {
 	arr := []int{1, 2, 3, 4, 5}
 	ch := Accumulate(arr, "multiply", 100)
-	for value := range ch {
-		fmt.Printf("%v:", value)
+	for element := range ch {
+		fmt.Printf("%v:", element)
 	}
 	// Output: 100:101:102:106:124:220:
 }
@@ -145,8 +145,8 @@ func ExampleAccumulateMultiplyWithStart() {
 func ExampleTee() {
 	param := "ABCDEFGHIJKLMNOPQ"
 	ch := Tee(param, 2)
-	for value := range ch {
-		fmt.Printf("%v:", value)
+	for element := range ch {
+		fmt.Printf("%v:", element)
 	}
 	// Output: AB:CD:EF:GH:IJ:KL:MN:OP:Q:
 }
@@ -154,8 +154,8 @@ func ExampleTee() {
 func ExampleTeeArray() {
 	param := []int{1, 2, 3, 4, 5, 6, 7, 8, 9}
 	ch := Tee(param, 2)
-	for value := range ch {
-		fmt.Printf("%v:", value)
+	for element := range ch {
+		fmt.Printf("%v:", element)
 	}
 	// Output: [1 2]:[3 4]:[5 6]:[7 8]:[9]:
 }
@@ -163,10 +163,22 @@ func ExampleTeeArray() {
 func ExamplePairwise() {
 	param := "ABCDEFGHIJKLP"
 	ch := Pairwise(param)
-	for value := range ch {
-		fmt.Printf("%v:", value)
+	for element := range ch {
+		fmt.Printf("%v:", element)
 	}
 	// Output: AB:CD:EF:GH:IJ:KL:P:
+}
+
+func ExampleDropwhile() {
+	param := []int{1, 4, 6, 4, 1}
+	predicate := Predicate(func(i interface{}) bool {
+		return i.(int) < 5
+	})
+	ch := Dropwhile(predicate, param)
+	for element := range ch {
+		fmt.Printf("%v:", element)
+	}
+	// Output: 6:4:1:
 }
 
 func generateRandomString(stringLength int) (result string) {

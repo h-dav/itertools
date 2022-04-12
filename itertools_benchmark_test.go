@@ -134,6 +134,19 @@ func BenchmarkAccumulateMultiplyWithStart(b *testing.B) {
 	}
 }
 
+func BenchmarkDropwhile(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		arr := rand.Perm(repeatTimes)
+		predicate := Predicate(func(i interface{}) bool {
+			return i.(int) < 5
+		})
+		ch := Dropwhile(predicate, arr)
+		for range ch {
+			<-ch
+		}
+	}
+}
+
 func BenchmarkTeeString(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		counter := 0

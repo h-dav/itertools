@@ -7,14 +7,15 @@ import (
 )
 
 type Iterator chan interface{}
+type Predicate func(interface{}) bool
 
 // Iter returns an Iterator for the iterables parameter
 func Iter[T any](iterables []T) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
 		defer close(ch)
-		for _, value := range iterables {
-			ch <- value
+		for _, element := range iterables {
+			ch <- element
 		}
 	}()
 	return
@@ -25,11 +26,11 @@ func Next(ch Iterator) any {
 	return <-ch
 }
 
-// Repeat returns an Iterator which contains value parameter, size parameter amount of times
-func Repeat(value any, size int) Iterator {
+// Repeat returns an Iterator which contains element parameter, size parameter amount of times
+func Repeat(element any, size int) Iterator {
 	s := make([]any, size)
 	for i := range s {
-		s[i] = value
+		s[i] = element
 	}
 	return Iter(s)
 }
@@ -133,24 +134,24 @@ func Tee[T []int | string](iterable T, n int) (ch Iterator) {
 		defer close(ch)
 		switch reflect.TypeOf(iterable).Kind() {
 		case reflect.String:
-			value := reflect.ValueOf(iterable).String()
-			for len(value) != 0 {
-				if len(value) < n {
-					ch <- value
+			element := reflect.ValueOf(iterable).String()
+			for len(element) != 0 {
+				if len(element) < n {
+					ch <- element
 					return
 				}
-				ch <- value[0:n]
-				value = value[n:]
+				ch <- element[0:n]
+				element = element[n:]
 			}
 		case reflect.Array, reflect.Slice:
-			value := reflect.ValueOf(iterable)
-			for value.Len() != 0 {
-				if value.Len() < n {
-					ch <- value
+			element := reflect.ValueOf(iterable)
+			for element.Len() != 0 {
+				if element.Len() < n {
+					ch <- element
 					return
 				}
-				toSend := value.Slice(0, n)
-				value = value.Slice(n, value.Len())
+				toSend := element.Slice(0, n)
+				element = element.Slice(n, element.Len())
 				ch <- toSend
 			}
 		}
@@ -164,8 +165,27 @@ func Pairwise(iterable string) (ch Iterator) {
 	go func() {
 		defer close(ch)
 		innerCh := Tee(iterable, 2)
-		for value := range innerCh {
-			ch <- value
+		for element := range innerCh {
+			ch <- element
+		}
+	}()
+	return
+}
+
+// Dropwhile drops element from the iterable as long as the predicate is true - afterwards, returns every element using an Iterator
+func Dropwhile(predicate Predicate, iterable []int) (ch Iterator) {
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		innerCh := Iter(iterable)
+		for element := range innerCh {
+			if !predicate(element) {
+				ch <- element
+				break
+			}
+		}
+		for element := range innerCh {
+			ch <- element
 		}
 	}()
 	return
