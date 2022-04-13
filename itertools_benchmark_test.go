@@ -142,7 +142,24 @@ func BenchmarkDropwhile(b *testing.B) {
 		})
 		ch := Dropwhile(predicate, arr)
 		for range ch {
-			<-ch
+			continue
+		}
+	}
+}
+
+func BenchmarkFilterfalse(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		arr := rand.Perm(repeatTimes)
+		isOdd := Predicate(func(i interface{}) bool {
+			result := i.(int) % 2
+			if result == 1 {
+				return true
+			}
+			return false
+		})
+		ch := Filterfalse(isOdd, arr)
+		for range ch {
+			continue
 		}
 	}
 }

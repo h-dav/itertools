@@ -8,6 +8,9 @@ import (
 
 type Iterator chan interface{}
 type Predicate func(interface{}) bool
+type Number interface {
+	int | int8 | int32 | int64 | float32 | float64
+}
 
 // Iter returns an Iterator for the iterables parameter
 func Iter[T any](iterables []T) (ch Iterator) {
@@ -44,7 +47,7 @@ func Zip[T any](iterables ...[]T) (ch Iterator) {
 			ch <- "all parameters must be of the same length"
 			return
 		}
-		var toSend []any
+		var toSend []T
 		for index := range iterables[0] {
 			toSend = nil
 			for _, iterable := range iterables {
@@ -71,7 +74,7 @@ func Chain[T any](iterables ...[]T) (ch Iterator) {
 }
 
 // Count counts up from a certain number in an increment
-func Count[T float32 | float64 | int](start, step T) (ch Iterator) {
+func Count[T Number](start, step T) (ch Iterator) {
 	// consider changing step to uint
 	ch = make(Iterator)
 	go func() {
@@ -173,7 +176,7 @@ func Pairwise(iterable string) (ch Iterator) {
 }
 
 // Dropwhile drops element from the iterable as long as the predicate is true - afterwards, returns every element using an Iterator
-func Dropwhile(predicate Predicate, iterable []int) (ch Iterator) {
+func Dropwhile[T Number](predicate Predicate, iterable []T) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
 		defer close(ch)
@@ -186,6 +189,20 @@ func Dropwhile(predicate Predicate, iterable []int) (ch Iterator) {
 		}
 		for element := range innerCh {
 			ch <- element
+		}
+	}()
+	return
+}
+
+func Filterfalse[T Number](predicate Predicate, iterable []T) (ch Iterator) {
+	ch = make(Iterator)
+	go func() {
+		defer close(ch)
+		innerCh := Iter(iterable)
+		for element := range innerCh {
+			if !predicate(element) {
+				ch <- element
+			}
 		}
 	}()
 	return

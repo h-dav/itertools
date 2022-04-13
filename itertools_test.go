@@ -10,9 +10,9 @@ func ExampleIterInt() {
 	arr := []int{1, 2, 3, 4}
 	ch := Iter(arr)
 	for element := range ch {
-		fmt.Printf("%v", element)
+		fmt.Printf("%v:", element)
 	}
-	// Output: 1234
+	// Output: 1:2:3:4:
 }
 
 func TestIterLower(t *testing.T) {
@@ -179,6 +179,22 @@ func ExampleDropwhile() {
 		fmt.Printf("%v:", element)
 	}
 	// Output: 6:4:1:
+}
+
+func ExampleFilterfalse() {
+	param := []int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}
+	isOdd := Predicate(func(i interface{}) bool {
+		result := i.(int) % 2
+		if result == 1 {
+			return true
+		}
+		return false
+	})
+	ch := Filterfalse(isOdd, param)
+	for element := range ch {
+		fmt.Printf("%v:", element)
+	}
+	// Output: 2:4:6:8:10:
 }
 
 func generateRandomString(stringLength int) (result string) {
