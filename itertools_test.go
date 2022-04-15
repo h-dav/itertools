@@ -179,3 +179,14 @@ func generateRandomString(stringLength int) (result string) {
 	result = string(b)
 	return
 }
+
+func TestCompress(t *testing.T) {
+	data := []string{"A", "B", "C", "D", "E", "F"}
+	selector := []bool{true, false, true, false, false, true}
+	ch := Compress(data, selector)
+
+	for value := range ch {
+		fmt.Printf("%v:", value)
+	}
+
+}
