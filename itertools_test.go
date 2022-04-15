@@ -188,5 +188,5 @@ func TestCompress(t *testing.T) {
 	for value := range ch {
 		fmt.Printf("%v:", value)
 	}
-
+	// Output: A:C:F:
 }

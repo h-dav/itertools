@@ -182,12 +182,14 @@ func ensureSameLength[T any](nestedList [][]T) bool {
 	return true
 }
 
-func Compress[T any](data T, selector []bool) (ch Iterator) {
+func Compress[T any](data []T, selector []bool) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
 		defer close(ch)
-		for {
-			ch <- selector
+		for i, d := range data {
+			if selector[i] {
+				ch <- d
+			}
 		}
 	}()
 	return
