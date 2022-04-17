@@ -187,7 +187,7 @@ func Compress[T any](data []T, selector []bool) (ch Iterator) {
 	go func() {
 		defer close(ch)
 		for i, d := range data {
-			if selector[i] {
+			if len(selector) > i && selector[i] {
 				ch <- d
 			}
 		}

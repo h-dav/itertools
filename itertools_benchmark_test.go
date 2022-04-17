@@ -9,6 +9,18 @@ import (
 const repeatTimes = 1000
 const stringLength = 100
 
+func randBool(n int) []bool {
+	m := make([]bool, n)
+	for i := 0; i < n; i++ {
+		if rand.Intn(2)%2 == 0 {
+			m[i] = true
+		} else {
+			m[i] = false
+		}
+	}
+	return m
+}
+
 func BenchmarkIter(b *testing.B) {
 	arr := rand.Perm(repeatTimes)
 	for n := 0; n < b.N; n++ {
@@ -158,6 +170,28 @@ func BenchmarkTeeArray(b *testing.B) {
 		}
 		if counter != repeatTimes/4 {
 			b.Log("Tee results not long enough")
+			b.Fail()
+		}
+	}
+}
+
+func BenchmarkCompress(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		chCounter := 0
+		sCounter := 0
+		data := rand.Perm(repeatTimes)
+		selector := randBool(repeatTimes)
+		for i := range selector {
+			if selector[i] {
+				sCounter++
+			}
+		}
+		ch := Compress(data, selector)
+		for range ch {
+			chCounter++
+		}
+		if chCounter != sCounter {
+			b.Log("Compress results are the wrong len")
 			b.Fail()
 		}
 	}
