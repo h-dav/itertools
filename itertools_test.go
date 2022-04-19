@@ -207,3 +207,19 @@ func generateRandomString(stringLength int) (result string) {
 	result = string(b)
 	return
 }
+
+func TestCompressString(t *testing.T) {
+	expected, counter := 3, 0
+	data := []string{"A", "B", "C", "D", "E", "F"}
+	selector := []bool{true, false, true, false, false, true}
+	ch := Compress(data, selector)
+
+	for value := range ch {
+		fmt.Printf("%v:", value)
+		counter++
+	}
+	if counter != expected {
+		t.Error("counter not expected number, got: ", counter, "expected :", expected)
+	}
+	// Output: A:C:F:
+}
