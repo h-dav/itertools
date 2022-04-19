@@ -182,6 +182,7 @@ func ensureSameLength[T any](nestedList [][]T) bool {
 	return true
 }
 
+// Compress filters elements from data returning only those that have a corresponding element in selector that is true
 func Compress[T any](data []T, selector []bool) (ch Iterator) {
 	ch = make(Iterator)
 	go func() {
