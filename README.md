@@ -1,5 +1,6 @@
 # itertools
 Basically python itertools in golang
 
-#### Disclaimer: WIP
-This project is currently prioritising basic slice/array and string iteration, with aims to support most data types for iteration in the future - so chill out, and feel free to contribute.
+### Deprecated and archived as iterators are included in Go 1.23 (https://tip.golang.org/doc/go1.23#iterators)
+
+This project is prioritising basic slice/array and string iteration
